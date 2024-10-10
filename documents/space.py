@@ -1,6 +1,6 @@
 import pygame  # necessaire pour charger les images et les sons
 import random  # necessaire pour faire apparaitre les ennemis de manière aléatoire
-
+import math
 class Joueur() : # classe pour créer le vaisseau du joueur
     def __init__(self) :
         self.position = 400
@@ -8,7 +8,6 @@ class Joueur() : # classe pour créer le vaisseau du joueur
         self.sens = "O"
         self.vitesse = 5
         self.score = 0
-
     def deplacer(self) :
         if (self.sens == "droite") and (self.position < 740):
             self.position = self.position + self.vitesse
@@ -17,7 +16,10 @@ class Joueur() : # classe pour créer le vaisseau du joueur
            
     def tirer(self):
         self.sens = "O"
-
+        
+    def marquer(self):
+        self.score += 1
+        
 class Balle() :
     def __init__(self, tireur):
         self.tireur = tireur
@@ -35,20 +37,40 @@ class Balle() :
         if self.hauteur < 0:
             self.etat = "chargee"
             
-class Ennemi(self):
-    NbEnnemis = 0
-    def __init__(self, player):
+    def toucher(self, vaisseau):
+        if (math.fabs(self.hauteur - vaisseau.hauteur) < 40) and (math.fabs(self.depart - vaisseau.depart) < 40):
+            self.etat = "chargee"
+            return True
+            
+class Ennemi():
+    NbEnnemis = 6
+    
+    def __init__(self):
         self.depart= random.randint(0, 800-64)
         self.hauteur= 64
-        self.type= 0
-        self.image = pygame.image.load("invader1.png")
-        self.vitesse= 1
+        self.type= random.randint(1, 2)
+        if  (self.type == 1):
+            self.image = pygame.image.load("invader1.png")
+            self.vitesse = 0.5
+        elif (self.type ==2):
+            self.image = pygame.image.load("invader2.png")
+            self.vitesse = 1
     
     def avancer(self):
-        self.hauteur = self.hauteur + 2
-        if self.hauteur > 600:
-            self.hauteur = 64
-            self.hauteur = self.hauteur + 2
+        self.hauteur = self.hauteur + self.vitesse
+    
+    def disparaitre(self):
+        self.depart = random.randint(1,700)
+        self.hauteur = 10
+        self.type = random.randint(1,2)
+        if  (self.type == 1):
+            self.image = pygame.image.load("invader1.png")
+            self.vitesse = 1
+        elif (self.type ==2):
+            self.image = pygame.image.load("invader2.png")
+            self.vitesse = 2
+        
+        
         
                 
             
