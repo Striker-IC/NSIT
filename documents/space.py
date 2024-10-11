@@ -1,6 +1,7 @@
 import pygame  # necessaire pour charger les images et les sons
-import random  # necessaire pour faire apparaitre les ennemis de manière aléatoire
+import random
 import math
+
 class Joueur() : # classe pour créer le vaisseau du joueur
     def __init__(self) :
         self.position = 400
@@ -8,6 +9,7 @@ class Joueur() : # classe pour créer le vaisseau du joueur
         self.sens = "O"
         self.vitesse = 5
         self.score = 0
+
     def deplacer(self) :
         if (self.sens == "droite") and (self.position < 740):
             self.position = self.position + self.vitesse
@@ -18,8 +20,8 @@ class Joueur() : # classe pour créer le vaisseau du joueur
         self.sens = "O"
         
     def marquer(self):
-        self.score += 1
-        
+        self.score = self.score + 1
+
 class Balle() :
     def __init__(self, tireur):
         self.tireur = tireur
@@ -27,35 +29,37 @@ class Balle() :
         self.hauteur = 492
         self.image = pygame.image.load("balle.png")
         self.etat = "chargee"
-        
-    def bouger(self):    
+        self.vitesse = 5
+    
+    def bouger(self):
         if self.etat == "chargee":
-                self.depart = self.tireur.position + 16
-                self.hauteur = 492
+            self.depart = self.tireur.position + 16
+            self.hauteur = 492
         elif self.etat == "tiree" :
-                self.hauteur = self.hauteur - 5    
+            self.hauteur = self.hauteur - self.vitesse
+        
         if self.hauteur < 0:
             self.etat = "chargee"
-            
+                
     def toucher(self, vaisseau):
         if (math.fabs(self.hauteur - vaisseau.hauteur) < 40) and (math.fabs(self.depart - vaisseau.depart) < 40):
             self.etat = "chargee"
             return True
-            
+  
 class Ennemi():
     NbEnnemis = 6
     
     def __init__(self):
-        self.depart= random.randint(0, 800-64)
-        self.hauteur= 64
-        self.type= random.randint(1, 2)
+        self.depart = random.randint(1,700)
+        self.hauteur = 10
+        self.type = random.randint(1,2)
         if  (self.type == 1):
             self.image = pygame.image.load("invader1.png")
-            self.vitesse = 0.5
+            self.vitesse = 1
         elif (self.type ==2):
             self.image = pygame.image.load("invader2.png")
-            self.vitesse = 1
-    
+            self.vitesse = 2
+            
     def avancer(self):
         self.hauteur = self.hauteur + self.vitesse
     
@@ -69,17 +73,14 @@ class Ennemi():
         elif (self.type ==2):
             self.image = pygame.image.load("invader2.png")
             self.vitesse = 2
-        
-        
-        
-                
             
-        
-        
-        
+class Sound:
     
-    
-                
+    def __init__(self):
+        self.sounds = {
+            "tir": pygame.mixer.Sound("shooting.mp3"),
+            "explosion": pygame.mixer.Sound("Explosion meme - Sound Effect.mp3"),
+            }
         
-        
-        
+    def play(self, name):
+        self.sounds[name].play()

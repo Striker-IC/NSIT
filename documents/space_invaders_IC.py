@@ -4,14 +4,16 @@ import sys # pour fermer correctement l'application
 
 # lancement des modules inclus dans pygame
 pygame.init() 
-
 # création d'une fenêtre de 800 par 600
 screen = pygame.display.set_mode((800,600))
 pygame.display.set_caption("Space Invaders") 
 # chargement de l'image de fond
 fond = pygame.image.load('background.png')
+
 #création de la musique de fond
-#pygame.mixer.music.load()
+pygame.mixer.init()
+pygame.mixer.music.load('À travers la galaxie - Super Mario Galaxy OST.mp3')
+pygame.mixer.music.unload()
 
 # creation du joueur
 player = space.Joueur()
@@ -23,6 +25,9 @@ listeEnnemis = []
 for indice in range(space.Ennemi.NbEnnemis):
     vaisseau = space.Ennemi()
     listeEnnemis.append(vaisseau)
+
+# création des bruitages
+bruit=space.Sound()
     
 ### BOUCLE DE JEU  ###
 running = True # variable pour laisser la fenêtre ouverte
@@ -30,7 +35,11 @@ running = True # variable pour laisser la fenêtre ouverte
 while running : # boucle infinie pour laisser la fenêtre ouverte
     # dessin du fond
     screen.blit(fond,(0,0))
-
+    
+    
+    # musique de fond
+    pygame.mixer.music.play(loops=2)
+    
     ### Gestion des événements  ###
     for event in pygame.event.get(): # parcours de tous les event pygame dans cette fenêtre
         if event.type == pygame.QUIT : # si l'événement est le clic sur la fermeture de la fenêtre
@@ -46,12 +55,14 @@ while running : # boucle infinie pour laisser la fenêtre ouverte
             if event.key == pygame.K_SPACE : # espace pour tirer
                 player.tirer()
                 tir.etat = "tiree"
+                self.bruit.play("tir")
 
     ### Actualisation de la scene ###
     # Gestions des collisions
     for ennemi in listeEnnemis:
         if tir.toucher(ennemi):
             ennemi.disparaitre()
+            self.bruit.play("explosion")
             player.marquer()
     print(f"Score = {player.score} points")
     # placement des objets
