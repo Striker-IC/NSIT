@@ -55,7 +55,7 @@ while running : # boucle infinie pour laisser la fenêtre ouverte
             if event.key == pygame.K_SPACE : # espace pour tirer
                 player.tirer()
                 tir.etat = "tiree"
-                self.bruit.play("tir")
+                bruit.play("tir")
 
     ### Actualisation de la scene ###
     # Gestions des collisions
