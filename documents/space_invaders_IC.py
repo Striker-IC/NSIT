@@ -62,7 +62,7 @@ while running : # boucle infinie pour laisser la fenêtre ouverte
     for ennemi in listeEnnemis:
         if tir.toucher(ennemi):
             ennemi.disparaitre()
-            self.bruit.play("explosion")
+            bruit.play("explosion")
             player.marquer()
     print(f"Score = {player.score} points")
     # placement des objets
