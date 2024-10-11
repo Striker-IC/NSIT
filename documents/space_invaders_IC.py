@@ -1,6 +1,7 @@
 import pygame # importation de la librairie pygame
 import space
 import sys # pour fermer correctement l'application
+import time
 
 # lancement des modules inclus dans pygame
 pygame.init() 
@@ -10,10 +11,6 @@ pygame.display.set_caption("Space Invaders")
 # chargement de l'image de fond
 fond = pygame.image.load('background.png')
 
-#création de la musique de fond
-pygame.mixer.init()
-pygame.mixer.music.load('À travers la galaxie - Super Mario Galaxy OST.mp3')
-pygame.mixer.music.unload()
 
 # creation du joueur
 player = space.Joueur()
@@ -26,20 +23,19 @@ for indice in range(space.Ennemi.NbEnnemis):
     vaisseau = space.Ennemi()
     listeEnnemis.append(vaisseau)
 
-# création des bruitages
+# création des bruitages et ajout de la musique du fond
 bruit=space.Sound()
-    
+bruit.play("fond")
+
 ### BOUCLE DE JEU  ###
 running = True # variable pour laisser la fenêtre ouverte
 
+    
 while running : # boucle infinie pour laisser la fenêtre ouverte
     # dessin du fond
     screen.blit(fond,(0,0))
     
-    
-    # musique de fond
-    pygame.mixer.music.play(loops=2)
-    
+   
     ### Gestion des événements  ###
     for event in pygame.event.get(): # parcours de tous les event pygame dans cette fenêtre
         if event.type == pygame.QUIT : # si l'événement est le clic sur la fermeture de la fenêtre
@@ -65,6 +61,7 @@ while running : # boucle infinie pour laisser la fenêtre ouverte
             bruit.play("explosion")
             player.marquer()
     print(f"Score = {player.score} points")
+    
     # placement des objets
     # le joueur
     player.deplacer()
